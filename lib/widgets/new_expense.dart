@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-final formatter = DateFormat.yMd();
+import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -14,6 +13,8 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  Category _selectedCatgory = Category.leisure;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -80,8 +81,29 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
+          const SizedBox(height: 16),
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCatgory,
+                items: Category.values
+                    .map((c) => DropdownMenuItem(
+                          value: c,
+                          child: Text(
+                            c.name.toUpperCase(),
+                          ),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _selectedCatgory = value;
+                  });
+                },
+              ),
+              const Spacer(),
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
